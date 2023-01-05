@@ -1,0 +1,27 @@
+# Maria DB ver. jammy
+services:
+  mysqldb:
+    container_name: mariadbv1
+    env_file: ./.env
+    image: mariadb:jammy
+    restart: always
+    networks:
+      - database
+    environment:
+      MYSQL_ROOT_PASSWORD: ${HASH_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${HASH_DB_NAME}
+      MYSQL_USER: ${HASH_USER}
+      MYSQL_PASSWORD: ${HASH_PASSWORD}
+#   expose:
+#      - 3306
+    ports:
+      - 3306:3306
+    volumes:
+      - db-config:/etc/mysql
+      - db-data:/var/lib/mysql
+      - ~/.backup/db/:/backup/
+volumes:
+  db-config:
+  db-data:
+networks:
+  database:
