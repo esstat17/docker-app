@@ -1,0 +1,50 @@
+version: "3.9"
+
+services:
+ mariadb:
+    container_name: mariadbv1
+    env_file: .env
+    image: mariadb:10.9.4
+    restart: always
+    volumes:
+      - db-config:/etc/mysql
+      - db-data:/var/lib/mysql
+      # If you want to persist data on the host, comment the line above this one...
+      # and uncomment the line under this one.
+      # - ./file-store/db/data:/var/lib/mysql:rw,delegated
+    environment:
+      MYSQL_ROOT_PASSWORD: ${HASH_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${HASH_DB_NAME}
+      MYSQL_USER: ${HASH_USER}
+      MYSQL_PASSWORD: ${HASH_PASSWORD}
+    ports:
+      - '3306:3306'
+    networks:
+      - mariadb1
+ 
+ phpmyadmin:
+    build:
+      #args:
+      #  user: crater-user
+      #  uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    container_name: phpmyadminv1
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 33006:3306
+    environment:
+     # allows you to connect to any MySQL server
+     #  Whether it is running on the same host as phpMyAdmin or not.
+      - PMA_ARBITRARY=1
+#    volumes:
+      # - db:/var/lib/mysql
+#      - ./file-store/apache2:/etc/apache2:rw,delegated
+volumes:
+  # db:
+  db-config:
+  db-data:
+  
+networks:
+  mariadb1:

@@ -1,3 +1,4 @@
 # Exclude ENV files
 .env
 *.env
+./vol*

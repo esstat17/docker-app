@@ -1,0 +1,68 @@
+version: "3.9"  # optional since v1.27.0
+# docker build -t project_folder .
+# docker-compose pull // pull images
+# docker-compose up -d
+# docker-compose up --build // to rebuild image
+# docker-compose down // stop containers
+# docker kill $(docker ps -q) // stop all container instances
+# docker rm $(docker ps -a -q) // remove containers
+# docker rmi $(docker images -q) // remove images
+# docker volume prune // remove all unused volumes
+# docker exec -it <container name> /bin/bash
+# Access image 
+# docker run -it --name mycontainer myimage /bin/bash
+#
+services:
+  # APP for now
+  centos_server:
+    # Naming the image version or TAG
+    image: centos.server:rc1
+    # Instead of referencing image: nginx:mainline-alpine here, use build to
+    # reference the current directory (.), which will look for a dockerfile
+    # by default.
+    build: 
+      context: ./
+      dockerfile: Dockerfile
+     # target: websitse1-com
+    privileged: true
+    container_name: centos_server
+    restart: on-failure
+    #command: ./start_server.sh
+    # The external directory location to map to an internal location
+    volumes:
+      - ./public/index.html:/var/www/html/index.html
+      # - ./config/nginx/conf.d:/etc/nginx/conf.d
+      # It is important that both containers can reference the same files
+      - website_data:/var/www/html/sample1
+    ports:
+      # "public_port:container_port"
+      - "7000:${PORT}"
+    # env_file:
+    #  - ./config/env/.env
+    # environment:
+      #  - env_var_name=another_value
+    # depends_on:
+    #  - nginx
+  #nginx:
+  #  image: nginx:1.20.2
+  #  volumes:
+     # - ./config/nginx/conf.d:/etc/nginx/conf.d
+  #  restart: always
+  #  command: [nginx-debug, '-g', 'daemon off;']
+  db:
+    image: mariadb:10.8
+    volumes:
+     - shared_data:/var/lib/mysql
+    restart: always
+    environment:
+     MARIADB_ROOT_PASSWORD: root
+     MARIADB_DATABASE: testingdb
+     MARIADB_USER: user
+     MARIADB_PASSWORD: userpassword
+    # env_file:
+    #  - ./config/env/.env
+    ports:
+     - "3306:3306"  
+volumes:
+  shared_data: {}
+  website_data: {}

@@ -1,0 +1,31 @@
+version: '3'
+services:
+  apptest:
+    # build: .
+    image: dockertestv1
+    ports:
+      - "8443:80"
+    #labels:
+    #  - "traefik.enable=true"
+    #  - "traefik.http.routers.webapp1.entrypoints=web"
+    #  - "traefik.http.routers.webapp1.rule=Host(`app-5.datacareph.com`)"
+    #  - "traefik.http.middlewares.webapp1-https-redirect.redirectscheme.scheme=https"
+    #  - "traefik.http.routers.webapp1.middlewares=webapp1-https-redirect"
+    #  - "traefik.http.routers.webapp1-secure.entrypoints=web-secure"
+    #  - "traefik.http.routers.webapp1-secure.rule=Host(`app-5.datacareph.com`)"
+    #  - "traefik.http.routers.webapp1-secure.tls=true"
+    #  - "traefik.http.routers.webapp1-secure.tls.certresolver=cloudflare1"
+    #  - "traefik.http.routers.webapp1-secure.service=webapp1"
+    #  - "traefik.http.routers.webapp1-secure.tls.domains[0].main=*.${DOMAIN}"
+    #  - "traefik.http.services.webapp1.loadbalancer.server.port=80"
+    environment:
+      - PORT=80
+    # networks:
+    #   - traefik-network1
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    #  - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./vol/data:/data
+# networks:
+#   traefik-network1:
+#     external: true

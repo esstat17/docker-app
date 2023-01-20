@@ -1,0 +1,15 @@
+version: '3'
+services:
+  ovpn-server-1:
+    container_name: ovpn-server-1
+    image: kylemanna/openvpn
+    volumes:
+      - ovpn-data-ver1:/etc/openvpn
+    restart: always
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "21300:1194/udp"
+volumes:
+  ovpn-data-ver1:
+    external: true
